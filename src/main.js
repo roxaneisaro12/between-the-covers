@@ -20,7 +20,7 @@ document.querySelector('#app').innerHTML = `
       <div class="hero-copy">
         <p class="eyebrow">A LITTLE SPACE FOR BOOK LOVERS</p>
 
-        <h1>Find your next<br />favorite <em>story.</em></h1>
+        <h1>Stories worth <em>getting lost.</em><br />in</h1>
 
         <p class="hero-description">
           Discover new books, revisit old favorites, and find
