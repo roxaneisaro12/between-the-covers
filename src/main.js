@@ -7,11 +7,10 @@ document.querySelector('#app').innerHTML = `
       <a class="brand" href="#home">Between <span>the Covers</span></a>
 
       <div class="nav-links">
-        <a class="active" href="#home">Home</a>
-        <a href="#books">Explore books</a>
-        <a href="#favorites">Favorites</a>
-        <a href="#about">About</a>
-      </div>
+  <a href="/">Home</a>
+  <a href="/favorites.html">Favorites</a>
+  <a href="/about.html">About</a>
+</div>
     </nav>
   </header>
 
