@@ -509,3 +509,176 @@ a {
     padding: 50px 22px;
   }
 }
+/* Search results and book cover fallbacks */
+.book-card .cover img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cover-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 260px;
+  padding: 1.25rem;
+  background: #e5ebdd;
+}
+
+.cover-fallback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  width: 100%;
+  min-height: 220px;
+  padding: 1.25rem;
+  border: 1px solid #cbd6c5;
+  color: #315c48;
+  text-align: center;
+}
+
+.cover-fallback span {
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+}
+
+.cover-fallback strong {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.4rem;
+  font-weight: 400;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.search-status:empty {
+  display: none;
+}
+
+/* Give the search area breathing room */
+.book-search-form {
+  margin-bottom: 2rem;
+}
+
+.book-search-controls {
+  display: flex;
+  align-items: stretch;
+  gap: 0.75rem;
+}
+
+.book-search-controls input {
+  flex: 1;
+  min-width: 0;
+}
+
+.book-search-controls button {
+  flex-shrink: 0;
+}
+
+.book-grid {
+  margin-top: 1.5rem;
+}
+
+/* Keep book cards aligned in a neat grid */
+.book-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.5rem;
+  align-items: stretch;
+  margin-top: 1.5rem;
+}
+
+.book-card {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.book-card .cover {
+  width: 100%;
+  min-height: 280px;
+  overflow: hidden;
+}
+
+.book-card .cover img {
+  width: 100%;
+  height: 280px;
+  display: block;
+  object-fit: cover;
+}
+
+.book-card .book-title {
+  min-height: 3rem;
+}
+
+.book-card .book-author {
+  min-height: 2.5rem;
+}
+
+.book-card .favorite-button {
+  margin-top: auto;
+  align-self: flex-start;
+}
+
+@media (max-width: 900px) {
+  .book-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .book-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .book-card .cover {
+    min-height: 260px;
+  }
+
+  .book-card .cover img {
+    height: 260px;
+  }
+}
+
+/* Separate book details from the favorite button */
+.book-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+}
+
+.book-card .book-category {
+  margin-bottom: 0.5rem;
+}
+
+.book-card .book-title {
+  margin-top: 0;
+  margin-bottom: 0.6rem;
+  line-height: 1.4;
+}
+
+.book-card .book-author {
+  margin-top: 0;
+  margin-bottom: 0.8rem;
+  line-height: 1.6;
+}
+
+.book-card .book-year {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.book-card .favorite-button {
+  margin-top: 0.75rem;
+  margin-bottom: 0.5rem;
+  align-self: flex-start;
+  white-space: normal;
+  line-height: 1.4;
+  min-height: 44px;
+  height: auto;
+}
