@@ -90,7 +90,7 @@ The project was developed in stages:
 
 ## Deployment
 
-**Live website:** Add your published GitHub Pages URL here after deployment.
+**Live website:** https://roxaneisaro12.github.io/between-the-covers/
 
 **Repository:** https://github.com/roxaneisaro12/between-the-covers
 
