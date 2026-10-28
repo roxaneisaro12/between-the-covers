@@ -296,12 +296,14 @@ bookGrid.addEventListener('click', (event) => {
   if (!card) return
 
   const book = {
-    id: card.dataset.bookId,
-    title: card.dataset.bookTitle,
-    author: card.dataset.bookAuthor,
-    category: card.dataset.bookCategory,
-  }
-
+  id: card.dataset.bookId,
+  title: card.dataset.bookTitle,
+  author: card.dataset.bookAuthor,
+  category: card.dataset.bookCategory,
+  coverId: card.querySelector('.cover img')
+    ? card.querySelector('.cover img').src.match(/\/b\/id\/([^/]+)/)?.[1]
+    : null,
+}
   const favorites = getFavorites()
   const isSaved = favorites.some((favorite) => favorite.id === book.id)
 
