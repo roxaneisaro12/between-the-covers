@@ -143,8 +143,8 @@ function updateFavoriteButtons() {
     )
 
     button.textContent = isSaved
-      ? 'Remove from favorites'
-      : 'Save to favorites'
+      ? 'Remove from Favorites'
+      : 'Add to Favorites'
 
     button.setAttribute('aria-pressed', String(isSaved))
   })

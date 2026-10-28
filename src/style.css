@@ -748,3 +748,42 @@ a {
     height: 240px;
   }
 }
+/* Cleaner book cards and favorite buttons */
+.book-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.book-card .book-title {
+  margin-top: 0.85rem;
+  margin-bottom: 0.35rem;
+  line-height: 1.4;
+}
+
+.book-card .book-author {
+  margin-bottom: 0.85rem;
+  line-height: 1.5;
+}
+
+.book-card .favorite-button {
+  width: 100%;
+  margin-top: auto;
+  padding: 0.75rem 0.8rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.book-card .favorite-button:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.book-card .favorite-button:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
