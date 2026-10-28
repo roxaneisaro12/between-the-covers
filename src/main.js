@@ -46,7 +46,7 @@ document.querySelector('#app').innerHTML = `
         </div>
         <div class="book book-three">
           <span>A FIELD GUIDE TO</span>
-          <strong>WILD<br />THOUGHTS</strong>
+          <strong>WILD<br />Thoughts</strong>
           <small>ESSAYS &amp; REFLECTIONS</small>
         </div>
         <p class="art-caption">Every book opens a new door.</p>

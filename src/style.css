@@ -824,3 +824,8 @@ a {
   outline: 2px solid #285943;
   outline-offset: 3px;
 }
+.favorite-book-details h2 {
+  font-size: 1.15rem;
+  font-weight: 400;
+  line-height: 1.4;
+}
