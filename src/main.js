@@ -1,6 +1,7 @@
 
 import './style.css'
 import { getFavorites, addFavorite, removeFavorite } from './favorites.js'
+import { fetchBooks } from './fetchBooks.js'
 
 document.querySelector('#app').innerHTML = `
   <header class="site-header">
@@ -46,7 +47,7 @@ document.querySelector('#app').innerHTML = `
         <div class="book book-three">
           <span>A FIELD GUIDE TO</span>
           <strong>WILD<br />THOUGHTS</strong>
-          <small>ESSAYS & REFLECTIONS</small>
+          <small>ESSAYS &amp; REFLECTIONS</small>
         </div>
         <p class="art-caption">Every book opens a new door.</p>
       </div>
@@ -58,94 +59,41 @@ document.querySelector('#app').innerHTML = `
           <p class="eyebrow">YOUR NEXT READ STARTS HERE</p>
           <h2>A shelf worth exploring</h2>
         </div>
-        <a class="text-link" href="#books">Discover more &rarr;</a>
       </div>
 
-      <div class="book-grid">
-        <article
-          class="book-card"
-          data-book-id="quiet-garden"
-          data-book-title="The Quiet Garden"
-          data-book-author="A story about finding your way"
-          data-book-category="FICTION"
-        >
-          <div class="cover cover-sage">
-            <span class="cover-label">A NOVEL</span>
-            <h3>Where the<br />Green Things Grow</h3>
-            <span class="cover-author">A STORY OF BEGINNINGS</span>
-          </div>
-          <p class="book-category">FICTION</p>
-          <h3 class="book-title">The Quiet Garden</h3>
-          <p class="book-author">A story about finding your way</p>
-          <button class="primary-button favorite-button" type="button">
-            Save to favorites
-          </button>
-        </article>
+      <form class="book-search-form" id="book-search-form" role="search">
+        <label for="book-search">Find your next read</label>
 
-        <article
-          class="book-card"
-          data-book-id="slower-day"
-          data-book-title="A Slower Kind of Day"
-          data-book-author="Reflections on everyday life"
-          data-book-category="NONFICTION"
-        >
-          <div class="cover cover-cream">
-            <span class="cover-label">PERSONAL ESSAYS</span>
-            <h3>On Finding<br />Your Own Pace</h3>
-            <span class="cover-author">SMALL NOTES ON LIFE</span>
-          </div>
-          <p class="book-category">NONFICTION</p>
-          <h3 class="book-title">A Slower Kind of Day</h3>
-          <p class="book-author">Reflections on everyday life</p>
-          <button class="primary-button favorite-button" type="button">
-            Save to favorites
-          </button>
-        </article>
+        <div class="book-search-controls">
+          <input
+            id="book-search"
+            name="query"
+            type="search"
+            placeholder="Search books, authors, or subjects..."
+            autocomplete="off"
+            required
+          />
 
-        <article
-          class="book-card"
-          data-book-id="between-lines"
-          data-book-title="Between the Lines"
-          data-book-author="Poems for thoughtful moments"
-          data-book-category="POETRY"
-        >
-          <div class="cover cover-green">
-            <span class="cover-label">SELECTED POEMS</span>
-            <h3>Things We<br />Cannot Name</h3>
-            <span class="cover-author">WORDS & WONDER</span>
-          </div>
-          <p class="book-category">POETRY</p>
-          <h3 class="book-title">Between the Lines</h3>
-          <p class="book-author">Poems for thoughtful moments</p>
-          <button class="primary-button favorite-button" type="button">
-            Save to favorites
+          <button class="primary-button" type="submit">
+            Search books
           </button>
-        </article>
+        </div>
+      </form>
 
-        <article
-          class="book-card"
-          data-book-id="map-becoming"
-          data-book-title="A Map of Becoming"
-          data-book-author="A journey of change and belonging"
-          data-book-category="CONTEMPORARY"
-        >
-          <div class="cover cover-white">
-            <span class="cover-label">A COMING-OF-AGE STORY</span>
-            <h3>All the Places<br />We Become</h3>
-            <span class="cover-author">A NOVEL</span>
-          </div>
-          <p class="book-category">CONTEMPORARY</p>
-          <h3 class="book-title">A Map of Becoming</h3>
-          <p class="book-author">A journey of change and belonging</p>
-          <button class="primary-button favorite-button" type="button">
-            Save to favorites
-          </button>
-        </article>
-      </div>
+      <p
+        class="search-status"
+        id="search-status"
+        role="status"
+        aria-live="polite"
+      >
+        Loading books...
+      </p>
+
+      <div class="book-grid" aria-label="Book search results"></div>
 
       <p class="collection-note">
-        This is a preview of the collection. Real book discovery and search
-        will be connected in a later stage.
+        Discover books from the Open Library catalogue and save the ones
+        you would love to read.
       </p>
     </section>
 
@@ -179,12 +127,16 @@ document.querySelector('#app').innerHTML = `
 `
 
 const bookGrid = document.querySelector('.book-grid')
+const searchForm = document.querySelector('#book-search-form')
+const searchInput = document.querySelector('#book-search')
+const searchStatus = document.querySelector('#search-status')
 
 function updateFavoriteButtons() {
   const favorites = getFavorites()
 
   document.querySelectorAll('.book-card[data-book-id]').forEach((card) => {
     const button = card.querySelector('.favorite-button')
+    if (!button) return
 
     const isSaved = favorites.some(
       (book) => book.id === card.dataset.bookId
@@ -198,12 +150,150 @@ function updateFavoriteButtons() {
   })
 }
 
+function createCoverFallback(book, cover) {
+  cover.classList.add('cover-placeholder')
+
+  const fallback = document.createElement('div')
+  fallback.className = 'cover-fallback'
+
+  const label = document.createElement('span')
+  label.textContent = 'BETWEEN THE COVERS'
+
+  const title = document.createElement('strong')
+  title.textContent = book.title
+
+  fallback.append(label, title)
+  cover.append(fallback)
+}
+
+function createBookCard(book) {
+  const card = document.createElement('article')
+  card.className = 'book-card'
+  card.dataset.bookId = book.id
+  card.dataset.bookTitle = book.title
+  card.dataset.bookAuthor = book.author
+  card.dataset.bookCategory = book.category || 'BOOK'
+
+  const cover = document.createElement('div')
+  cover.className = 'cover cover-sage'
+
+  if (book.coverId) {
+    const image = document.createElement('img')
+
+    image.src =
+      `https://covers.openlibrary.org/b/id/${encodeURIComponent(book.coverId)}-M.jpg`
+
+    image.alt = `Cover of ${book.title}`
+    image.loading = 'lazy'
+
+    image.addEventListener('error', () => {
+      image.remove()
+      createCoverFallback(book, cover)
+    }, { once: true })
+
+    cover.append(image)
+  } else {
+    createCoverFallback(book, cover)
+  }
+
+  const category = document.createElement('p')
+  category.className = 'book-category'
+  category.textContent = book.category || 'BOOK'
+
+  const title = document.createElement('h3')
+  title.className = 'book-title'
+  title.textContent = book.title
+
+  const author = document.createElement('p')
+  author.className = 'book-author'
+  author.textContent = book.author
+
+  const favoriteButton = document.createElement('button')
+  favoriteButton.className = 'primary-button favorite-button'
+  favoriteButton.type = 'button'
+  favoriteButton.textContent = 'Save to favorites'
+
+  card.append(cover, category, title, author)
+
+  if (book.year) {
+    const year = document.createElement('p')
+    year.className = 'book-year'
+    year.textContent = `First published: ${book.year}`
+    card.append(year)
+  }
+
+  card.append(favoriteButton)
+
+  return card
+}
+
+function displayBooks(books) {
+  bookGrid.replaceChildren()
+
+  if (!books.length) {
+    searchStatus.textContent =
+      'No books found. Try another title, author, or subject.'
+    return
+  }
+
+  const fragment = document.createDocumentFragment()
+
+  books.forEach((book) => {
+    fragment.append(createBookCard(book))
+  })
+
+  bookGrid.append(fragment)
+
+  // Keep successful results clean: no book-count message.
+  searchStatus.textContent = ''
+
+  updateFavoriteButtons()
+}
+
+async function searchBooks(query) {
+  searchStatus.textContent = 'Searching the Open Library catalogue...'
+  bookGrid.replaceChildren()
+
+  const submitButton = searchForm.querySelector('button[type="submit"]')
+  submitButton.disabled = true
+
+  try {
+    const books = await fetchBooks(query)
+    displayBooks(books)
+  } catch (error) {
+    console.error('Book search failed:', error)
+
+    searchStatus.textContent =
+      error.message || 'Unable to load books. Please try again.'
+
+    bookGrid.replaceChildren()
+  } finally {
+    submitButton.disabled = false
+  }
+}
+
+searchForm.addEventListener('submit', (event) => {
+  event.preventDefault()
+
+  const query = searchInput.value.trim()
+
+  if (!query) {
+    searchStatus.textContent =
+      'Enter a book title, author, or subject to search.'
+
+    searchInput.focus()
+    return
+  }
+
+  searchBooks(query)
+})
+
 bookGrid.addEventListener('click', (event) => {
   const button = event.target.closest('.favorite-button')
-
   if (!button) return
 
   const card = button.closest('.book-card')
+  if (!card) return
 
   const book = {
     id: card.dataset.bookId,
@@ -224,4 +314,5 @@ bookGrid.addEventListener('click', (event) => {
   updateFavoriteButtons()
 })
 
-updateFavoriteButtons()
+// Load real books when the homepage opens.
+searchBooks('fiction')
