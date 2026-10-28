@@ -4,7 +4,7 @@ const API_URL = 'https://openlibrary.org/search.json'
 export async function fetchBooks(query = 'fiction') {
   const params = new URLSearchParams({
     q: query,
-    fields: 'key,title,author_name,cover_i,first_publish_year',
+    fields: 'key,title,author_name,cover_i,first_publish_year,subject',
     limit: '12',
   })
 
@@ -22,5 +22,6 @@ export async function fetchBooks(query = 'fiction') {
     author: book.author_name?.join(', ') || 'Unknown author',
     coverId: book.cover_i || null,
     year: book.first_publish_year || null,
+    subjects: book.subject || [],
   }))
 }

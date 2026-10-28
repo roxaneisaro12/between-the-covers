@@ -787,3 +787,33 @@ a {
   outline: 2px solid currentColor;
   outline-offset: 3px;
 }
+.category-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 1.5rem 0;
+}
+
+.category-button {
+  padding: 0.55rem 1rem;
+  border: 1px solid #e3d5da;
+  border-radius: 999px;
+  background: #fff;
+  color: #285943;
+  font: inherit;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.category-button:hover,
+.category-button.active {
+  background: #285943;
+  color: #fff;
+  border-color: #285943;
+}
+
+.category-button:focus-visible {
+  outline: 2px solid #285943;
+  outline-offset: 3px;
+}
