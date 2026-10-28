@@ -6,12 +6,12 @@ import { fetchBooks } from './fetchBooks.js'
 document.querySelector('#app').innerHTML = `
   <header class="site-header">
     <nav class="navigation" aria-label="Main navigation">
-      <a class="brand" href="/">Between <span>the Covers</span></a>
+      <a class="brand" href="./">Between <span>the Covers</span></a>
 
       <div class="nav-links">
-        <a href="/">Home</a>
-        <a href="/favorites.html">Favorites</a>
-        <a href="/about.html">About</a>
+        <a href="./">Home</a>
+        <a href="./favorites.html">Favorites</a>
+        <a href="./about.html">About</a>
       </div>
     </nav>
   </header>
@@ -105,7 +105,7 @@ document.querySelector('#app').innerHTML = `
         the ones you love, and make your reading journey your own.
       </p>
       <p>
-        <a class="text-link" href="/about.html">Read our story &rarr;</a>
+        <a class="text-link" href="./about.html">Read our story &rarr;</a>
       </p>
     </section>
 
@@ -114,13 +114,13 @@ document.querySelector('#app').innerHTML = `
       <h2>Keep the stories you love close.</h2>
       <p>Your saved books are waiting for you.</p>
       <p>
-        <a class="primary-button" href="/favorites.html">View your favorites</a>
+        <a class="primary-button" href="./favorites.html">View your favorites</a>
       </p>
     </section>
   </main>
 
   <footer class="site-footer">
-    <a class="brand" href="/">Between <span>the Covers</span></a>
+    <a class="brand" href="./">Between <span>the Covers</span></a>
     <p>A thoughtful place for your next chapter.</p>
     <p class="copyright">&copy; 2026 Between the Covers</p>
   </footer>
@@ -173,6 +173,7 @@ function createBookCard(book) {
   card.dataset.bookTitle = book.title
   card.dataset.bookAuthor = book.author
   card.dataset.bookCategory = book.category || 'BOOK'
+  card.dataset.bookCoverId = book.coverId || ''
 
   const cover = document.createElement('div')
   cover.className = 'cover cover-sage'
@@ -296,11 +297,12 @@ bookGrid.addEventListener('click', (event) => {
   if (!card) return
 
   const book = {
-    id: card.dataset.bookId,
-    title: card.dataset.bookTitle,
-    author: card.dataset.bookAuthor,
-    category: card.dataset.bookCategory,
-  }
+  id: card.dataset.bookId,
+  title: card.dataset.bookTitle,
+  author: card.dataset.bookAuthor,
+  category: card.dataset.bookCategory,
+  coverId: card.dataset.bookCoverId || null,
+}
 
   const favorites = getFavorites()
   const isSaved = favorites.some((favorite) => favorite.id === book.id)

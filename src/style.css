@@ -682,3 +682,69 @@ a {
   min-height: 44px;
   height: auto;
 }
+
+/* Favorites bookshelf */
+.favorites-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.favorite-book-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid #eadde2;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.favorite-book-cover {
+  display: block;
+  width: 100%;
+  height: 280px;
+  object-fit: contain;
+  background: #f7f3f5;
+}
+
+.favorite-book-details {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1.25rem;
+}
+
+.favorite-book-details h2 {
+  margin: 0;
+  line-height: 1.4;
+}
+
+.favorite-book-author {
+  margin: 0;
+  color: #6f5962;
+}
+
+.favorite-book-details .primary-button {
+  margin-top: auto;
+  cursor: pointer;
+}
+
+.empty-favorites {
+  padding: 1.5rem;
+  border-radius: 12px;
+  background: #f7f3f5;
+  line-height: 1.7;
+}
+
+@media (max-width: 480px) {
+  .favorites-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .favorite-book-cover {
+    height: 240px;
+  }
+}
