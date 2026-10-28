@@ -97,3 +97,6 @@ The project was developed in stages:
 ## Author
 
 Developed by Roxane Isaro as part of the Frontend Phase 1 Capstone.
+
+## Deployment
+This project is deployed using GitHub Actions and GitHub Pages.
