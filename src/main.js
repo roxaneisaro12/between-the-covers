@@ -46,7 +46,7 @@ document.querySelector('#app').innerHTML = `
         </div>
         <div class="book book-three">
           <span>A FIELD GUIDE TO</span>
-          <strong>WILD<br />THOUGHTS</strong>
+          <strong>WILD<br />Thoughts</strong>
           <small>ESSAYS &amp; REFLECTIONS</small>
         </div>
         <p class="art-caption">Every book opens a new door.</p>
@@ -60,7 +60,14 @@ document.querySelector('#app').innerHTML = `
           <h2>A shelf worth exploring</h2>
         </div>
       </div>
-
+            <div class="category-filters" aria-label="Filter books by category">
+        <button class="category-button active" type="button" data-category="all">All Books</button>
+        <button class="category-button" type="button" data-category="fiction">Fiction</button>
+        <button class="category-button" type="button" data-category="romance">Romance</button>
+        <button class="category-button" type="button" data-category="mystery">Mystery</button>
+        <button class="category-button" type="button" data-category="fantasy">Fantasy</button>
+        <button class="category-button" type="button" data-category="history">History</button>
+      </div>
       <form class="book-search-form" id="book-search-form" role="search">
         <label for="book-search">Find your next read</label>
 
@@ -130,6 +137,9 @@ const bookGrid = document.querySelector('.book-grid')
 const searchForm = document.querySelector('#book-search-form')
 const searchInput = document.querySelector('#book-search')
 const searchStatus = document.querySelector('#search-status')
+const categoryFilters = document.querySelector('.category-filters')
+let currentBooks = []
+let activeCategory = 'all'
 
 function updateFavoriteButtons() {
   const favorites = getFavorites()
@@ -229,27 +239,45 @@ function createBookCard(book) {
 }
 
 function displayBooks(books) {
+  currentBooks = books
+  renderFilteredBooks()
+}
+
+function renderFilteredBooks() {
+  const filteredBooks = currentBooks.filter((book) => {
+    if (activeCategory === 'all') return true
+
+    const subjects = (book.subjects || [])
+      .map((subject) => subject.toLowerCase())
+
+    return subjects.some((subject) =>
+      subject.includes(activeCategory)
+    )
+  })
+
   bookGrid.replaceChildren()
 
-  if (!books.length) {
+  if (!filteredBooks.length) {
     searchStatus.textContent =
-      'No books found. Try another title, author, or subject.'
+      activeCategory === 'all'
+        ? 'No books found. Try another search.'
+        : `No ${activeCategory} books found in these results. Try another category or search.`
+
     return
   }
 
   const fragment = document.createDocumentFragment()
 
-  books.forEach((book) => {
+  filteredBooks.forEach((book) => {
     fragment.append(createBookCard(book))
   })
 
   bookGrid.append(fragment)
-
-  // Keep successful results clean: no book-count message.
-  searchStatus.textContent = ''
+  searchStatus.textContent = `${filteredBooks.length} books shown`
 
   updateFavoriteButtons()
 }
+
 
 async function searchBooks(query) {
   searchStatus.textContent = 'Searching the Open Library catalogue...'
@@ -318,3 +346,15 @@ bookGrid.addEventListener('click', (event) => {
 
 // Load real books when the homepage opens.
 searchBooks('fiction')
+categoryFilters.addEventListener('click', (event) => {
+  const button = event.target.closest('.category-button')
+  if (!button) return
+
+  activeCategory = button.dataset.category
+
+  categoryFilters.querySelectorAll('.category-button').forEach((item) => {
+    item.classList.toggle('active', item === button)
+  })
+
+  renderFilteredBooks()
+})
